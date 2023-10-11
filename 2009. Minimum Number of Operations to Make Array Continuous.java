@@ -1,15 +1,26 @@
-public int minOperations(int[] nums) {
-        Arrays.sort(nums);
-        int count=Integer.MAX_VALUE,j=1,dup=0;
-        int[] dupArr = new int[nums.length];
-        for(int i=0;i<nums.length;i++) {
-            while(j<nums.length&&nums[j]<=nums[i]+nums.length-1) {
-                if(nums[j]==nums[j-1]) ++dup;
-                dupArr[j]=dup;
-                j++;
+class Solution {
+    public int minOperations(int[] nums) {
+        int n = nums.length;
+        Arrays.sort(nums); // Sort the input array in ascending order
+        int m = 1;
+        
+        // Remove duplicate elements in the sorted array
+        for (int i = 1; i < n; ++i) {
+            if (nums[i] != nums[i - 1]) {
+                nums[m++] = nums[i];
             }
-            count = Math.min(count, i+(nums.length-j)+dup-dupArr[i]);
         }
-        return count;
+        
+        int ans = n;
+        
+        // Use a sliding window to find the minimum number of operations
+        for (int i = 0, j = 0; i < m; ++i) {
+            while (j < m && nums[j] - nums[i] <= n - 1) {
+                ++j;
+            }
+            ans = Math.min(ans, n - (j - i));
+        }
+        
+        return ans;
     }
-	
+}
